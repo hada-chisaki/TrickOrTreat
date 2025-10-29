@@ -1,8 +1,11 @@
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class PlayerStatus : MonoBehaviour
 {
-    public PlayerStatus playerStatus;
+    [Header("プレイヤーのパラメーター")]
+
+    public float currentHP = 100;
+    public float maxHP = 100;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -13,17 +16,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-    }
-
-    void GameOver()
-    {
-
-    }
-
-    void GameClear()
-    {
-
 
     }
 }
