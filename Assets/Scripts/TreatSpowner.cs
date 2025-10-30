@@ -1,8 +1,12 @@
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class TreatSpowner : MonoBehaviour
 {
-    public PlayerStatus playerStatus;
+    public GameObject prefab1;
+    public GameObject prefab2;
+
+    public Transform treatSpownerPos1;
+    public Transform treatSpownerPos2;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -13,16 +17,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-    }
-
-    void GameOver()
-    {
-
-    }
-    void GameClear()
-    {
-
 
     }
 }

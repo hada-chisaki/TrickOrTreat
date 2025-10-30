@@ -1,0 +1,34 @@
+{
+    "name": "Input",
+    "maps": [
+        {
+            "name": "New action map",
+            "id": "4ed23d19-63bc-46b0-bddb-e87a997e1534",
+            "actions": [
+                {
+                    "name": "UI",
+                    "type": "Button",
+                    "id": "bbf9807f-5042-485e-8be9-f821ac35075f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2fa86a1b-f5a0-4c34-9143-ad67cff61682",
+                    "path": "<QuestTouchPlusController>/secondaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.InputSystem;
 
 namespace HeneGames.DialogueSystem
 {
@@ -11,6 +12,10 @@ namespace HeneGames.DialogueSystem
         #region Singleton
 
         public static DialogueUI instance { get; private set; }
+
+
+        // 追加：Input System 用（Aボタン=primaryButton などを割り当て）
+        [SerializeField] private InputActionReference nextSentence;
 
         private void Awake()
         {
@@ -27,6 +32,15 @@ namespace HeneGames.DialogueSystem
             //Hide dialogue and interaction UI at awake
             dialogueWindow.SetActive(false);
             interactionUI.SetActive(false);
+        }
+
+        private void OnEnable()
+        {
+            if (nextSentence != null) nextSentence.action.Enable();   // 追加
+        }
+        private void OnDisable()
+        {
+            if (nextSentence != null) nextSentence.action.Disable();  // 追加
         }
 
         #endregion
@@ -54,22 +68,20 @@ namespace HeneGames.DialogueSystem
 
         private void Update()
         {
-            //Delay timer
-            if(startDialogueDelayTimer > 0f)
-            {
-                startDialogueDelayTimer -= Time.deltaTime;
-            }
+            if (startDialogueDelayTimer > 0f) startDialogueDelayTimer -= Time.deltaTime;
 
             InputUpdate();
         }
 
         public virtual void InputUpdate()
         {
-            //Next dialogue input
+            // 旧: キーボード
             if (Input.GetKeyDown(actionInput))
-            {
                 NextSentenceSoft();
-            }
+
+            // 追加: VRコントローラ（Input System）
+            if (nextSentence != null && nextSentence.action.WasPressedThisFrame())
+                NextSentenceSoft();
         }
 
         /// <summary>
@@ -156,7 +168,7 @@ namespace HeneGames.DialogueSystem
 
         public bool IsProcessingDialogue()
         {
-            if(currentDialogueManager != null)
+            if (currentDialogueManager != null)
             {
                 return true;
             }
@@ -186,11 +198,11 @@ namespace HeneGames.DialogueSystem
 
             float _speed = 1f - textAnimationSpeed;
 
-            foreach(char _letter in _letters)
+            foreach (char _letter in _letters)
             {
                 _textMeshObject.text += _letter;
 
-                if(_textMeshObject.text.Length == _letters.Length)
+                if (_textMeshObject.text.Length == _letters.Length)
                 {
                     typing = false;
                 }
