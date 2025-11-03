@@ -21,4 +21,14 @@ public class VRBillboard : MonoBehaviour
         // 常に顔の方を向く
         transform.rotation = Quaternion.LookRotation(forward, Vector3.up);
     }
+
+    public void StopFllowCamera()
+    {
+        followWhileOpen = false;
+    }
+
+    public void StartFllowCamera()
+    {
+        followWhileOpen = true;
+    }
 }

@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class ObjDeleter : MonoBehaviour
 {
-    public GameObject gameObject;
-    void OnTriggerEnter(Collider other)
+    public void DeleteObj(GameObject gameObject)
     {
         Destroy(gameObject);
     }
