@@ -466,7 +466,7 @@ MonoBehaviour:
   endDialogueEvent:
     m_PersistentCalls:
       m_Calls: []
-  triggerState: 1
+  triggerState: 0
   sentences:
   - dialogueCharacter: {fileID: 11400000, guid: 9624ffe5663bfbd4fa77a5da6ae3df8e, type: 2}
     sentence: This works on collision

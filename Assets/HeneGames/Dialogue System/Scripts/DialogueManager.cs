@@ -9,7 +9,7 @@ namespace HeneGames.DialogueSystem
     {
         private int currentSentence;
         private float coolDownTimer;
-        private bool dialogueIsOn;
+        private bool dialogueIsOn = false;
         private DialogueTrigger dialogueTrigger;
 
         public enum TriggerState
@@ -33,7 +33,7 @@ namespace HeneGames.DialogueSystem
         private void Update()
         {
             //Timer
-            if(coolDownTimer > 0f)
+            if (coolDownTimer > 0f)
             {
                 coolDownTimer -= Time.deltaTime;
             }
@@ -62,6 +62,7 @@ namespace HeneGames.DialogueSystem
         //Start dialogue by trigger
         private void OnTriggerEnter(Collider other)
         {
+            if (dialogueIsOn) Debug.Log("ダイアログtrue");
             if (triggerState == TriggerState.Collision && !dialogueIsOn)
             {
                 //Try to find the "DialogueTrigger" component in the crashing collider
@@ -83,6 +84,7 @@ namespace HeneGames.DialogueSystem
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
+
             if (triggerState == TriggerState.Collision && !dialogueIsOn)
             {
                 //Try to find the "DialogueTrigger" component in the crashing collider
@@ -170,7 +172,7 @@ namespace HeneGames.DialogueSystem
         public void StartDialogue()
         {
             //Start event
-            if(dialogueTrigger != null)
+            if (dialogueTrigger != null)
             {
                 dialogueTrigger.startDialogueEvent.Invoke();
             }
@@ -245,7 +247,7 @@ namespace HeneGames.DialogueSystem
             DialogueUI.instance.ClearText();
 
             //Stop audiosource so that the speaker's voice does not play in the background
-            if(audioSource != null)
+            if (audioSource != null)
             {
                 audioSource.Stop();
             }
@@ -293,7 +295,7 @@ namespace HeneGames.DialogueSystem
 
         public int CurrentSentenceLenght()
         {
-            if(sentences.Count <= 0)
+            if (sentences.Count <= 0)
                 return 0;
 
             return sentences[currentSentence].sentence.Length;
