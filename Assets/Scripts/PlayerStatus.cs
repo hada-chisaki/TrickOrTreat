@@ -7,6 +7,9 @@ public class PlayerStatus : MonoBehaviour
     public float currentHP = 100;
     public float maxHP = 100;
 
+    [Header("プレイヤーのパラメーター")]
+    public GameObject smooth;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -17,5 +20,14 @@ public class PlayerStatus : MonoBehaviour
     void Update()
     {
 
+    }
+    public void DialogPlayerStart() //会話が始まった時
+    {
+        smooth?.SetActive(false);
+    }
+
+    public void DialogPlayerEnd()  //会話が終了した時
+    {
+        smooth?.SetActive(true);
     }
 }
