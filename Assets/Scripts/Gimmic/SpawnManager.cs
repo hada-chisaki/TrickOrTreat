@@ -1,33 +1,50 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    [System.Serializable]
-    public class SpawnerData
-    {
-        public GhostSpawner spawner;
-        public float interval = 3f;
-    }
-    
-    public List<SpawnerData> spawners = new List<SpawnerData>();
-    
+    public GameObject ghostPrefab;
+    public List<Transform> spawnPoints = new List<Transform>();
+    public float spawnInterval = 3f;
+    public int spawnCount = 1;
+
     void Start()
     {
-        // シーン内の全スポーナーを自動取得
-        GhostSpawner[] found = FindObjectsOfType<GhostSpawner>();
-        foreach (var s in found)
+        StartCoroutine(SpawnLoop());
+    }
+
+    IEnumerator SpawnLoop()
+    {
+        while (true)
         {
-            spawners.Add(new SpawnerData { spawner = s, interval = 3f });
+            SpawnGhosts();
+            yield return new WaitForSeconds(spawnInterval);
         }
-        
-        // 各スポーナーの間隔を設定
-        foreach (var data in spawners)
+    }
+
+    void SpawnGhosts()
+    {
+        if (spawnPoints.Count == 0 || ghostPrefab == null) return;
+
+        List<Transform> availablePoints = new List<Transform>(spawnPoints);
+
+        for (int i = 0; i < spawnCount && availablePoints.Count > 0; i++)
         {
-            if (data.spawner != null)
-            {
-                data.spawner.SetInterval(data.interval);
-            }
+            int randomIndex = Random.Range(0, availablePoints.Count);
+            Transform point = availablePoints[randomIndex];
+            Instantiate(ghostPrefab, point.position, Quaternion.identity);
+            availablePoints.RemoveAt(randomIndex);
         }
+    }
+
+    public void SetSpawnInterval(float interval)
+    {
+        spawnInterval = interval;
+    }
+
+    public void SetSpawnCount(int count)
+    {
+        spawnCount = count;
     }
 }

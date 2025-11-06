@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject resultUI; // 結果表示UI
     [SerializeField] private Text scoreText; // スコア表示テキスト
     [SerializeField] private Text timerText; // タイマー表示テキスト（オプション）
+    [SerializeField] private GameObject Location;
 
     private int destroyedCount = 0;
     private float remainingTime;
@@ -63,6 +64,8 @@ public class GameManager : MonoBehaviour
             resultUI.SetActive(true);
             if (scoreText != null)
                 scoreText.text = $"撃破数: {destroyedCount}";
+
+            if (Location) Location.SetActive(false);
         }
     }
 
