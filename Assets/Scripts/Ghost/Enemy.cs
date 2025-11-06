@@ -15,6 +15,9 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private float squashTime = 0.15f;   // ぶよよん時間
 
+    [SerializeField] private float shinpuku = 1f;
+    [SerializeField] private float shindou = 1f;
+
     bool dying;
 
     private Rigidbody rigidbody;
@@ -31,10 +34,11 @@ public class Enemy : MonoBehaviour
 
         rigidbody.isKinematic = true;
 
-        Vector3 hitPos = c.contacts.Length > 0 ? c.contacts[0].point : transform.position;
-        StartCoroutine(SquashAndDie(hitPos));
+        HapticManager.Instance.VibrateRight(shindou, shinpuku);
 
+        Vector3 hitPos = c.contacts.Length > 0 ? c.contacts[0].point : transform.position;
         AudioSource.PlayClipAtPoint(hitsound, hitPos);
+        StartCoroutine(SquashAndDie(hitPos));
 
     }
 
