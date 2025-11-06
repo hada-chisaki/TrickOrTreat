@@ -33,7 +33,8 @@ public class SpawnManager : MonoBehaviour
         {
             int randomIndex = Random.Range(0, availablePoints.Count);
             Transform point = availablePoints[randomIndex];
-            Instantiate(ghostPrefab, point.position, Quaternion.identity);
+            GameObject ghost = Instantiate(ghostPrefab, point.position, Quaternion.identity);
+            ghost.SetActive(true);
             availablePoints.RemoveAt(randomIndex);
         }
     }

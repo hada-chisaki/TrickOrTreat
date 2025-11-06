@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
@@ -7,11 +6,10 @@ public class NavMeshCheckpointWalker : MonoBehaviour
 {
     [Header("参照")]
     [SerializeField] private NavMeshAgent agent;
-    [SerializeField] private Transform[] checkpoints;
+    [SerializeField] private Collider[] checkpoints; // ← 各チェックポイントにTrigger付きColliderを置く
 
     [Header("設定")]
-    [SerializeField] private float arriveThreshold = 0.5f; // 目標到達判定距離
-    [SerializeField] private float waitAfterArrival = 1f;  // 次のポイントに進む前の待機秒
+    [SerializeField] private float waitAfterArrival = 1f; // 少し待ってから次へ
 
     [Header("イベント")]
     public UnityEvent onReachPoint1;
@@ -20,39 +18,56 @@ public class NavMeshCheckpointWalker : MonoBehaviour
     public UnityEvent onAllPointsReached;
 
     private int currentIndex = 0;
-    private bool isWalking = false;
+    private bool isWaiting = false;
 
     void Start()
     {
-        if (agent == null) agent = GetComponent<NavMeshAgent>();
+        if (!agent) agent = GetComponent<NavMeshAgent>();
         if (checkpoints.Length > 0)
         {
-            MoveToNextCheckpoint();
+            MoveToCheckpoint(checkpoints[currentIndex].transform.position);
         }
     }
 
-    void Update()
+    private void MoveToCheckpoint(Vector3 pos)
     {
-        if (!isWalking || agent.pathPending) return;
-
-        if (agent.remainingDistance <= arriveThreshold)
+        if (!agent.isOnNavMesh)
         {
-            StartCoroutine(HandleArrival());
+            if (NavMesh.SamplePosition(pos, out var hit, 5f, NavMesh.AllAreas))
+                agent.Warp(hit.position);
+        }
+
+        agent.SetDestination(pos);
+        agent.isStopped = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // もし現在の目的地のチェックポイントに触れたら
+        if (isWaiting) return; // 二重呼び出し防止
+
+        if (checkpoints.Length == 0) return;
+        if (currentIndex >= checkpoints.Length) return;
+
+        if (other == checkpoints[currentIndex])
+        {
+            // 到達イベントを発火
+            switch (currentIndex)
+            {
+                case 0: onReachPoint1?.Invoke(); break;
+                case 1: onReachPoint2?.Invoke(); break;
+                case 2: onReachPoint3?.Invoke(); break;
+            }
+
+            // 次のポイントへ
+            StartCoroutine(WaitAndGoNext());
         }
     }
 
-    private IEnumerator HandleArrival()
+    private System.Collections.IEnumerator WaitAndGoNext()
     {
-        isWalking = false;
+        isWaiting = true;
         agent.isStopped = true;
-
-        // イベント発火
-        switch (currentIndex)
-        {
-            case 0: onReachPoint1?.Invoke(); break;
-            case 1: onReachPoint2?.Invoke(); break;
-            case 2: onReachPoint3?.Invoke(); break;
-        }
 
         yield return new WaitForSeconds(waitAfterArrival);
 
@@ -60,20 +75,13 @@ public class NavMeshCheckpointWalker : MonoBehaviour
 
         if (currentIndex < checkpoints.Length)
         {
-            MoveToNextCheckpoint();
+            MoveToCheckpoint(checkpoints[currentIndex].transform.position);
         }
         else
         {
             onAllPointsReached?.Invoke();
         }
-    }
 
-    private void MoveToNextCheckpoint()
-    {
-        if (checkpoints == null || checkpoints.Length == 0) return;
-
-        agent.SetDestination(checkpoints[currentIndex].position);
-        agent.isStopped = false;
-        isWalking = true;
+        isWaiting = false;
     }
 }
