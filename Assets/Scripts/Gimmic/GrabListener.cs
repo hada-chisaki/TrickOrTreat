@@ -19,8 +19,17 @@ public class GrabListener : MonoBehaviour
         grabbable = GetComponent<Grabbable>();
         grabbable.WhenPointerEventRaised += OnPointerEvent;
 
-        basePos = transform.position;
-        basePos.y += 1.0f;
+        // 親がいる場合はローカル座標、いない場合はワールド座標を基準にする
+        if (transform.parent != null)
+        {
+            basePos = transform.localPosition;
+            basePos.y += 1.0f;
+        }
+        else
+        {
+            basePos = transform.position;
+            basePos.y += 1.0f;
+        }
     }
 
     void OnDestroy()
@@ -35,7 +44,16 @@ public class GrabListener : MonoBehaviour
             floatTimer += Time.deltaTime * floatSpeed;
             Vector3 pos = basePos;
             pos.y += Mathf.Sin(floatTimer) * floatAmplitude;
-            transform.position = pos;
+
+            // 親がいる場合はローカル座標で制御、いない場合はワールド座標で制御
+            if (transform.parent != null)
+            {
+                transform.localPosition = pos;
+            }
+            else
+            {
+                transform.position = pos;
+            }
         }
     }
 
@@ -70,8 +88,19 @@ public class GrabListener : MonoBehaviour
             // 浮遊開始
             rb.useGravity = false;
             rb.isKinematic = true;
-            basePos = transform.position;
-            basePos.y += 1.0f;
+
+            // 親がいる場合はローカル座標、いない場合はワールド座標を基準にする
+            if (transform.parent != null)
+            {
+                basePos = transform.localPosition;
+                basePos.y += 1.0f;
+            }
+            else
+            {
+                basePos = transform.position;
+                basePos.y += 1.0f;
+            }
+
             isFloating = true;
             floatTimer = 0f;
             Debug.Log("✨ 浮遊モード開始");

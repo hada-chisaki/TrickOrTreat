@@ -6,11 +6,15 @@ public class GameManager : MonoBehaviour
     [Header("ゲーム設定")]
     [SerializeField] private float gameTime = 120f; // ゲーム時間（秒）
 
+
     [Header("UI要素")]
     [SerializeField] private GameObject resultUI; // 結果表示UI
     [SerializeField] private Text scoreText; // スコア表示テキスト
     [SerializeField] private Text timerText; // タイマー表示テキスト（オプション）
     [SerializeField] private GameObject Location;
+
+    //参照オブジェクト　
+    [SerializeField] OkashiManager okashiManager; // ゲーム時間（秒）
 
     private int destroyedCount = 0;
     private float remainingTime;

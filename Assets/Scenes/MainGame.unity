@@ -1026,7 +1026,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 0.99999994
-  m_BaseOffset: 0.49999997
+  m_BaseOffset: 1.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!114 &130619353
@@ -1048,7 +1048,19 @@ MonoBehaviour:
   waitAfterArrival: 3
   onReachPoint1:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 130619355}
+        m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+        m_MethodName: StealTreat
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onReachPoint2:
     m_PersistentCalls:
       m_Calls: []
@@ -1102,6 +1114,7 @@ MonoBehaviour:
   squashTime: 0.15
   shinpuku: 1
   shindou: 0.3
+  treat: {fileID: 9184910471943149851, guid: 838626094366f1b458c5246c1a472431, type: 3}
 --- !u!114 &133298478 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4925795957567557018, guid: fac1b34d244291e409464389de307e81, type: 3}
@@ -4071,7 +4084,7 @@ Transform:
   m_GameObject: {fileID: 832675391}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.049999952, y: 1.9, z: -5.04}
+  m_LocalPosition: {x: -0.049999952, y: 2, z: -5.04}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6244,6 +6257,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1305787677}
+  - component: {fileID: 1305787678}
   m_Layer: 0
   m_Name: Treat
   m_TagString: Untagged
@@ -6270,6 +6284,37 @@ Transform:
   - {fileID: 267586549}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1305787678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1305787676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65341f63178acff4c820a3581967f282, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialScore: 100
+  currentScore: 0
+  stages:
+  - stageName: "\u7B2C1\u6BB5\u968E"
+    borderScore: 70
+    targetObjects:
+    - {fileID: 181842629}
+    isActive: 1
+  - stageName: "\u7B2C2\u6BB5\u968E"
+    borderScore: 40
+    targetObjects:
+    - {fileID: 782201231}
+    isActive: 1
+  - stageName: "\u7B2C3\u6BB5\u968E"
+    borderScore: 10
+    targetObjects:
+    - {fileID: 162267384}
+    isActive: 1
+  isGameOver: 0
 --- !u!114 &1307414135 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4925795957567557018, guid: fac1b34d244291e409464389de307e81, type: 3}
@@ -6553,7 +6598,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1368125236}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &1368125240
 Camera:
   m_ObjectHideFlags: 0
@@ -7254,7 +7299,8 @@ MonoBehaviour:
   resultUI: {fileID: 963455013}
   scoreText: {fileID: 1882848434}
   timerText: {fileID: 796488030}
-  Location: {fileID: 0}
+  Location: {fileID: 6354504831042064474}
+  okashiManager: {fileID: 1305787678}
 --- !u!4 &1566619034
 Transform:
   m_ObjectHideFlags: 0
@@ -9969,7 +10015,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1726070868}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.49999997
+  m_Radius: 1.5
   m_Speed: 3
   m_Acceleration: 8
   avoidancePriority: 50
@@ -9978,8 +10024,8 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 0.99999994
-  m_BaseOffset: 0.49999997
+  m_Height: 1.5
+  m_BaseOffset: 1.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!114 &1726070870
@@ -10001,7 +10047,19 @@ MonoBehaviour:
   waitAfterArrival: 3
   onReachPoint1:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1726070872}
+        m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+        m_MethodName: StealTreat
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onReachPoint2:
     m_PersistentCalls:
       m_Calls: []
@@ -10055,6 +10113,7 @@ MonoBehaviour:
   squashTime: 0.15
   shinpuku: 1
   shindou: 0.3
+  treat: {fileID: 9184910471943149851, guid: 838626094366f1b458c5246c1a472431, type: 3}
 --- !u!1 &1749942896
 GameObject:
   m_ObjectHideFlags: 0
@@ -10603,7 +10662,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1832188846}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.49999997
+  m_Radius: 1.5
   m_Speed: 3
   m_Acceleration: 8
   avoidancePriority: 50
@@ -10612,8 +10671,8 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 0.99999994
-  m_BaseOffset: 0.49999997
+  m_Height: 1.5
+  m_BaseOffset: 1.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!114 &1832188848
@@ -10635,7 +10694,19 @@ MonoBehaviour:
   waitAfterArrival: 3
   onReachPoint1:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1832188850}
+        m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+        m_MethodName: StealTreat
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onReachPoint2:
     m_PersistentCalls:
       m_Calls: []
@@ -10689,6 +10760,7 @@ MonoBehaviour:
   squashTime: 0.15
   shinpuku: 1
   shindou: 0.3
+  treat: {fileID: 9184910471943149851, guid: 838626094366f1b458c5246c1a472431, type: 3}
 --- !u!114 &1834831466 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2975686924863246292, guid: fac1b34d244291e409464389de307e81, type: 3}
@@ -11486,7 +11558,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1883171645}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.49999997
+  m_Radius: 1.5
   m_Speed: 2.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -11495,8 +11567,8 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 0.99999994
-  m_BaseOffset: 0.49999997
+  m_Height: 1.5
+  m_BaseOffset: 1.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!114 &1883171647
@@ -11518,7 +11590,19 @@ MonoBehaviour:
   waitAfterArrival: 3
   onReachPoint1:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1883171649}
+        m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+        m_MethodName: StealTreat
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onReachPoint2:
     m_PersistentCalls:
       m_Calls: []
@@ -11572,6 +11656,7 @@ MonoBehaviour:
   squashTime: 0.15
   shinpuku: 1
   shindou: 0.3
+  treat: {fileID: 9184910471943149851, guid: 838626094366f1b458c5246c1a472431, type: 3}
 --- !u!1 &1883445042 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 133794, guid: 9128fac7ecb9c4b4085275bbf85879ee, type: 3}
@@ -15986,6 +16071,7 @@ MonoBehaviour:
   squashTime: 0.15
   shinpuku: 1
   shindou: 0.3
+  treat: {fileID: 9184910471943149851, guid: 838626094366f1b458c5246c1a472431, type: 3}
 --- !u!114 &8215388104621654135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16022,7 +16108,19 @@ MonoBehaviour:
   waitAfterArrival: 3
   onReachPoint1:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8215388104621654134}
+        m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+        m_MethodName: StealTreat
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onReachPoint2:
     m_PersistentCalls:
       m_Calls: []
@@ -16053,7 +16151,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 5618533116812501024}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.49999997
+  m_Radius: 1.5
   m_Speed: 2.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -16062,8 +16160,8 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 0.99999994
-  m_BaseOffset: 0.49999997
+  m_Height: 1.5
+  m_BaseOffset: 1.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!114 &8301342685286541331

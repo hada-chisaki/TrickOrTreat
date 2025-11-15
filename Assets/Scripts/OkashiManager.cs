@@ -32,7 +32,7 @@ public class OkashiManager : MonoBehaviour
     private int initialScore = 100;
 
     [SerializeField, Tooltip("現在のスコア（読み取り専用）")]
-    private int currentScore;
+    public int currentScore;
 
 
     [System.Serializable]
@@ -61,7 +61,7 @@ public class OkashiManager : MonoBehaviour
 
     [Header("ゲームオーバー設定")]
     [SerializeField, Tooltip("スコアが0になった時のフラグ")]
-    private bool isGameOver = false;
+    public bool isGameOver = false;
 
     // スコアが0になったときのイベント
     public delegate void GameOverDelegate();
@@ -95,7 +95,6 @@ public class OkashiManager : MonoBehaviour
         }
 
         instance = this;
-        DontDestroyOnLoad(gameObject);
 
         // 初期化
         Initialize();

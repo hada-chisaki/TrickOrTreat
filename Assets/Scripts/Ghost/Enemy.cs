@@ -18,6 +18,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float shinpuku = 1f;
     [SerializeField] private float shindou = 1f;
 
+    [SerializeField] private GameObject treat;
+
+
     bool dying;
 
     private Rigidbody rigidbody;
@@ -89,4 +92,16 @@ public class Enemy : MonoBehaviour
 
         Destroy(gameObject);
     }
+
+    public void StealTreat()  //お菓子を出現させる関数
+    {
+        Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
+        GameObject okashi = Instantiate(treat, pos, Quaternion.identity);
+
+        okashi.transform.SetParent(this.transform);
+
+        Vector3 position = new Vector3(0.0f, 0.0f, 0.0f);
+        okashi.transform.position = position;
+    }
+
 }
