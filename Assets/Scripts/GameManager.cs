@@ -42,9 +42,8 @@ public class GameManager : MonoBehaviour
         {
             GameOver();
         }
-
         // 時間切れでゲーム終了
-        if (remainingTime <= 0)
+        else if (remainingTime <= 0)
         {
             StopGame();
         }
@@ -89,6 +88,6 @@ public class GameManager : MonoBehaviour
 
     private void GameOver()   //ゲームオーバー時に発火する
     {
-
+        StopGame();
     }
 }

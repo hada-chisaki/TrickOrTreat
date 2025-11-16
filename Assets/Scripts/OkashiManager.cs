@@ -215,17 +215,6 @@ public class OkashiManager : MonoBehaviour
         OnGameOver?.Invoke();
     }
 
-    /// <summary>
-    /// スコアをリセットする（テスト用）
-    /// </summary>
-    public void ResetScore()
-    {
-        Initialize();
-        ShowAllStageObjects();
-        OnScoreChanged?.Invoke(currentScore);
-        Debug.Log("スコアをリセットしました");
-    }
-
     public void SubScore()
     {
         int previousScore = currentScore;
@@ -247,23 +236,6 @@ public class OkashiManager : MonoBehaviour
         currentScore += subPoint;
 
         CheckStageTransition(previousScore, currentScore);
-    }
-
-    /// <summary>
-    /// 現在の状態をデバッグ表示
-    /// </summary>
-    public void DebugCurrentStatus()
-    {
-        Debug.Log("=== お菓子マネジャー状態 ===");
-        Debug.Log($"現在のスコア: {currentScore}");
-        Debug.Log($"ゲームオーバー: {isGameOver}");
-
-        for (int i = 0; i < stages.Length; i++)
-        {
-            var stage = stages[i];
-            Debug.Log($"{stage.stageName} (ボーダー: {stage.borderScore}): " +
-                     $"{(stage.isActive ? "アクティブ" : "非アクティブ")}");
-        }
     }
 
 #if UNITY_EDITOR
