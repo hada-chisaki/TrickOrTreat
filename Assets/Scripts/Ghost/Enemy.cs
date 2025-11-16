@@ -99,9 +99,7 @@ public class Enemy : MonoBehaviour
         GameObject okashi = Instantiate(treat, pos, Quaternion.identity);
 
         okashi.transform.SetParent(this.transform);
-
-        Vector3 position = new Vector3(0.0f, 0.0f, 0.0f);
-        okashi.transform.position = position;
+        transform.localRotation = Quaternion.identity;
+        okashi.transform.localPosition = new Vector3(0.0f, 0.0f, -0.5f);
     }
-
 }

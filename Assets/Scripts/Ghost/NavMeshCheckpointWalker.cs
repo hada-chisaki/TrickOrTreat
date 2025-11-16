@@ -20,6 +20,10 @@ public class NavMeshCheckpointWalker : MonoBehaviour
     private int currentIndex = 0;
     private bool isWaiting = false;
 
+    [Header("デバッグ用")]
+    private float currentSpeed = 1.0f;
+    private float currentSAccele = 1.0f;
+
     void Start()
     {
         if (!agent) agent = GetComponent<NavMeshAgent>();
@@ -27,6 +31,22 @@ public class NavMeshCheckpointWalker : MonoBehaviour
         {
             MoveToCheckpoint(checkpoints[currentIndex].transform.position);
         }
+
+        currentSpeed = agent.speed;
+        currentSAccele = agent.acceleration;
+    }
+
+    void Update()
+    {
+        if (agent.speed != currentSpeed)
+        {
+            Debug.Log("速度が変わった");
+        }
+        if (currentSAccele != agent.acceleration)
+        {
+            Debug.Log("加速度の変更");
+        }
+
     }
 
     private void MoveToCheckpoint(Vector3 pos)

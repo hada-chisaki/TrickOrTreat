@@ -1538,6 +1538,7 @@ GameObject:
   - component: {fileID: 267586552}
   - component: {fileID: 267586551}
   - component: {fileID: 267586550}
+  - component: {fileID: 267586553}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -1636,6 +1637,34 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 267586548}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &267586553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 267586548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99df74039dfd1f449a8a573462de69ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagName: Ghost
+  onHitTriggerEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1305787678}
+        m_TargetAssemblyTypeName: OkashiManager, Assembly-CSharp
+        m_MethodName: SubScore
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &273863910
 GameObject:
   m_ObjectHideFlags: 0
@@ -3247,7 +3276,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 659970147}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -6039,7 +6068,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1219268862}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -6298,6 +6327,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialScore: 100
   currentScore: 0
+  subPoint: 5
   stages:
   - stageName: "\u7B2C1\u6BB5\u968E"
     borderScore: 70
@@ -6598,7 +6628,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1368125236}
-  m_Enabled: 0
+  m_Enabled: 1
 --- !u!20 &1368125240
 Camera:
   m_ObjectHideFlags: 0
@@ -10015,7 +10045,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1726070868}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 1.5
+  m_Radius: 0.7
   m_Speed: 3
   m_Acceleration: 8
   avoidancePriority: 50
@@ -10024,7 +10054,7 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 1.5
+  m_Height: 0.8
   m_BaseOffset: 1.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
@@ -10662,7 +10692,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1832188846}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 1.5
+  m_Radius: 0.7
   m_Speed: 3
   m_Acceleration: 8
   avoidancePriority: 50
@@ -10671,7 +10701,7 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 1.5
+  m_Height: 0.8
   m_BaseOffset: 1.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
@@ -11558,7 +11588,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1883171645}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 1.5
+  m_Radius: 0.7
   m_Speed: 2.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -11567,7 +11597,7 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 1.5
+  m_Height: 0.8
   m_BaseOffset: 1.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
@@ -11963,7 +11993,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1975472151}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -12292,7 +12322,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2115178249}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -16151,7 +16181,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 5618533116812501024}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 1.5
+  m_Radius: 0.7
   m_Speed: 2.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -16160,7 +16190,7 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 1.5
+  m_Height: 0.8
   m_BaseOffset: 1.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4

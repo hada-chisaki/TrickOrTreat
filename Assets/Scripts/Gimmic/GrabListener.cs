@@ -6,7 +6,7 @@ public class GrabListener : MonoBehaviour
     Grabbable grabbable;
     Rigidbody rb;
     bool isGrabbing;
-    bool isFloating = true;
+    bool isFloating = false;
     float floatTimer;
     Vector3 basePos;
 
@@ -18,18 +18,6 @@ public class GrabListener : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         grabbable = GetComponent<Grabbable>();
         grabbable.WhenPointerEventRaised += OnPointerEvent;
-
-        // 親がいる場合はローカル座標、いない場合はワールド座標を基準にする
-        if (transform.parent != null)
-        {
-            basePos = transform.localPosition;
-            basePos.y += 1.0f;
-        }
-        else
-        {
-            basePos = transform.position;
-            basePos.y += 1.0f;
-        }
     }
 
     void OnDestroy()
