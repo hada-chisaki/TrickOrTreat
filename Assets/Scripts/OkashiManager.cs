@@ -125,60 +125,6 @@ public class OkashiManager : MonoBehaviour
     }
 
     /// <summary>
-    /// スコアを減点する
-    /// </summary>
-    /// <param name="amount">減点する量</param>
-    public void DecreaseScore(int amount)
-    {
-        if (isGameOver) return;
-        if (amount < 0) amount = 0;
-
-        int previousScore = currentScore;
-        currentScore = Mathf.Max(0, currentScore - amount);
-
-        Debug.Log($"スコア減点: {previousScore} → {currentScore} (-{amount})");
-
-        // スコア変更イベントを発火
-        OnScoreChanged?.Invoke(currentScore);
-
-        // 段階チェック
-        CheckStageTransition(previousScore, currentScore);
-
-        // ゲームオーバーチェック
-        if (currentScore <= 0 && !isGameOver)
-        {
-            SetGameOver();
-        }
-    }
-
-    /// <summary>
-    /// スコアを加算する
-    /// </summary>
-    /// <param name="amount">加算する量</param>
-    public void AddScore(int amount)
-    {
-        if (amount < 0) amount = 0;
-
-        int previousScore = currentScore;
-        currentScore += amount;
-
-        Debug.Log($"スコア加算: {previousScore} → {currentScore} (+{amount})");
-
-        // スコア変更イベントを発火
-        OnScoreChanged?.Invoke(currentScore);
-
-        // 段階チェック（復活処理）
-        CheckStageTransition(previousScore, currentScore);
-
-        // ゲームオーバーフラグをリセット（スコアが0より大きくなった場合）
-        if (isGameOver && currentScore > 0)
-        {
-            isGameOver = false;
-            Debug.Log("ゲームオーバー状態から復帰");
-        }
-    }
-
-    /// <summary>
     /// 段階の遷移をチェック
     /// </summary>
     private void CheckStageTransition(int oldScore, int newScore)
@@ -282,12 +228,25 @@ public class OkashiManager : MonoBehaviour
 
     public void SubScore()
     {
+        int previousScore = currentScore;
         currentScore -= subPoint;
+
+        // 段階チェック
+        CheckStageTransition(previousScore, currentScore);
+
+        // ゲームオーバーチェック
+        if (currentScore <= 0 && !isGameOver)
+        {
+            SetGameOver();
+        }
     }
 
     public void AddScore()
     {
+        int previousScore = currentScore;
         currentScore += subPoint;
+
+        CheckStageTransition(previousScore, currentScore);
     }
 
     /// <summary>

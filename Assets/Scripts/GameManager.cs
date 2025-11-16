@@ -38,6 +38,11 @@ public class GameManager : MonoBehaviour
         if (timerText != null)
             timerText.text = $"残り時間: {Mathf.Max(0, Mathf.CeilToInt(remainingTime))}秒";
 
+        if (okashiManager.isGameOver)
+        {
+            GameOver();
+        }
+
         // 時間切れでゲーム終了
         if (remainingTime <= 0)
         {
@@ -80,5 +85,10 @@ public class GameManager : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene(
             UnityEngine.SceneManagement.SceneManager.GetActiveScene().name
         );
+    }
+
+    private void GameOver()   //ゲームオーバー時に発火する
+    {
+
     }
 }
