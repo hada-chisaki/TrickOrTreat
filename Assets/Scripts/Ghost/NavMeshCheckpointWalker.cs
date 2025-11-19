@@ -36,19 +36,6 @@ public class NavMeshCheckpointWalker : MonoBehaviour
         currentSAccele = agent.acceleration;
     }
 
-    void Update()
-    {
-        if (agent.speed != currentSpeed)
-        {
-            Debug.Log("速度が変わった");
-        }
-        if (currentSAccele != agent.acceleration)
-        {
-            Debug.Log("加速度の変更");
-        }
-
-    }
-
     private void MoveToCheckpoint(Vector3 pos)
     {
         if (!agent.isOnNavMesh)

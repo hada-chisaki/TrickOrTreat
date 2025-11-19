@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,6 +22,15 @@ public class GameManager : MonoBehaviour
     private float remainingTime;
     private bool isGameActive = true;
 
+    public struct LeaveTimeAction
+    {
+        public int time;
+        public UnityEvent action;
+    }
+
+    [Header("時間ごとに実行する関数")]
+    [SerializeField] public List<LeaveTimeAction> leaveTimeActions = new List<LeaveTimeAction>();
+
     void Start()
     {
         remainingTime = gameTime;
@@ -37,6 +48,14 @@ public class GameManager : MonoBehaviour
         // タイマー表示（オプション）
         if (timerText != null)
             timerText.text = $"残り時間: {Mathf.Max(0, Mathf.CeilToInt(remainingTime))}秒";
+
+        foreach (var leaveTimeAction in leaveTimeActions)
+        {
+            if (leaveTimeAction.time == remainingTime)
+            {
+                leaveTimeAction.action?.Invoke();
+            }
+        }
 
         if (okashiManager.isGameOver)
         {

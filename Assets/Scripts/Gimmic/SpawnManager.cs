@@ -81,6 +81,16 @@ public class SpawnManager : MonoBehaviour
 
     }
 
+    public void ChangeSpawnIntaval(int intaval)
+    {
+        spawnInterval = intaval;
+    }
+
+    public void ChangeSpawnGhostCount(int count)
+    {
+        spawnCount = count;
+    }
+
     // -----------------------
     // 外部制御用
     // -----------------------

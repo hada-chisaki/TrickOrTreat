@@ -1653,7 +1653,7 @@ MonoBehaviour:
   onHitTriggerEnter:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1305787678}
+      - m_Target: {fileID: 1305787679}
         m_TargetAssemblyTypeName: OkashiManager, Assembly-CSharp
         m_MethodName: SubScore
         m_Mode: 1
@@ -6286,7 +6286,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1305787677}
-  - component: {fileID: 1305787678}
+  - component: {fileID: 1305787679}
   m_Layer: 0
   m_Name: Treat
   m_TagString: Untagged
@@ -6302,7 +6302,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1305787676}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -1.5499992, y: 1.9, z: -3.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6313,7 +6313,7 @@ Transform:
   - {fileID: 267586549}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1305787678
+--- !u!114 &1305787679
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6328,6 +6328,7 @@ MonoBehaviour:
   initialScore: 100
   currentScore: 0
   subPoint: 5
+  addPoint: 5
   stages:
   - stageName: "\u7B2C1\u6BB5\u968E"
     borderScore: 70
@@ -6340,7 +6341,7 @@ MonoBehaviour:
     - {fileID: 782201231}
     isActive: 1
   - stageName: "\u7B2C3\u6BB5\u968E"
-    borderScore: 10
+    borderScore: 0
     targetObjects:
     - {fileID: 162267384}
     isActive: 1
@@ -6543,6 +6544,53 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!1 &1367231555
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1367231557}
+  - component: {fileID: 1367231556}
+  m_Layer: 0
+  m_Name: ScoreManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1367231556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367231555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 639248cfcf413914691cb861de65d237, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialScore: 100
+  currentScore: 0
+  isGameOver: 0
+--- !u!4 &1367231557
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1367231555}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.0320005, y: 1.9219999, z: 0.35099983}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1368125236
 GameObject:
   m_ObjectHideFlags: 0
@@ -6561,7 +6609,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1368125237
 Transform:
   m_ObjectHideFlags: 0
@@ -6628,7 +6676,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1368125236}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &1368125240
 Camera:
   m_ObjectHideFlags: 0
@@ -7325,12 +7373,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eee6fa776e549db4e95dc5f1a5354b77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameTime: 90
+  gameTime: 180
   resultUI: {fileID: 963455013}
   scoreText: {fileID: 1882848434}
   timerText: {fileID: 796488030}
   Location: {fileID: 6354504831042064474}
-  okashiManager: {fileID: 1305787678}
+  okashiManager: {fileID: 1305787679}
 --- !u!4 &1566619034
 Transform:
   m_ObjectHideFlags: 0
@@ -13557,7 +13605,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &4039103492393128287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16662,6 +16710,7 @@ SceneRoots:
   - {fileID: 1804942402}
   - {fileID: 601206855}
   - {fileID: 832675392}
-  - {fileID: 1305787677}
   - {fileID: 173848895}
   - {fileID: 820001480}
+  - {fileID: 1305787677}
+  - {fileID: 1367231557}

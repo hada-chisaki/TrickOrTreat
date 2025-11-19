@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private GameObject treat;
 
+    private GameObject treatObj;
 
     bool dying;
 
@@ -90,16 +91,18 @@ public class Enemy : MonoBehaviour
         var col = GetComponent<Collider>();
         if (col) col.enabled = false;
 
+        //お菓子オブジェクトの親子関係を解除
+        treatObj.transform.SetParent(null);
         Destroy(gameObject);
     }
 
     public void StealTreat()  //お菓子を出現させる関数
     {
         Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
-        GameObject okashi = Instantiate(treat, pos, Quaternion.identity);
+        treatObj = Instantiate(treat, pos, Quaternion.identity);
 
-        okashi.transform.SetParent(this.transform);
+        treatObj.transform.SetParent(this.transform);
         transform.localRotation = Quaternion.identity;
-        okashi.transform.localPosition = new Vector3(0.0f, 0.0f, -0.5f);
+        treatObj.transform.localPosition = new Vector3(0.0f, 0.0f, -0.5f);
     }
 }

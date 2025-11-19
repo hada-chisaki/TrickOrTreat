@@ -35,8 +35,8 @@ public class OkashiManager : MonoBehaviour
     public int currentScore;
 
 
-    [SerializeField]
-    public int subPoint = 5;
+    [SerializeField] public int subPoint = 5;
+    [SerializeField] public int addPoint = 5;
 
     [System.Serializable]
     public class StageThreshold
@@ -233,7 +233,7 @@ public class OkashiManager : MonoBehaviour
     public void AddScore()
     {
         int previousScore = currentScore;
-        currentScore += subPoint;
+        currentScore += addPoint;
 
         CheckStageTransition(previousScore, currentScore);
     }
