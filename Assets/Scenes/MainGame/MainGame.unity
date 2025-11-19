@@ -10208,7 +10208,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1749942897
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10244,7 +10244,6 @@ MonoBehaviour:
   maskRect: {fileID: 526731657}
   fillRect: {fileID: 90218837}
   fillImage: {fileID: 90218838}
-  playerStatus: {fileID: 7932941263697810169}
   normalColor: {r: 0, g: 1, b: 0, a: 1}
   dangerColor: {r: 1, g: 0, b: 0, a: 1}
   dangerThreshold: 0.4

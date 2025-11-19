@@ -29,7 +29,7 @@ public class OkashiManager : MonoBehaviour
 
     [Header("スコア設定")]
     [SerializeField, Tooltip("初期スコア")]
-    private int initialScore = 100;
+    public int initialScore = 100;
 
     [SerializeField, Tooltip("現在のスコア（読み取り専用）")]
     public int currentScore;
