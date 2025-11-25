@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     private float remainingTime;
     private bool isGameActive = true;
 
+    [System.Serializable]
     public struct LeaveTimeAction
     {
         public int time;
@@ -54,6 +55,8 @@ public class GameManager : MonoBehaviour
             if (leaveTimeAction.time == remainingTime)
             {
                 leaveTimeAction.action?.Invoke();
+
+                Debug.Log("関数実行");
             }
         }
 

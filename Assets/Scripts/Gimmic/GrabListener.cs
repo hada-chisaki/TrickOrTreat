@@ -1,9 +1,12 @@
 using Oculus.Interaction;
 using UnityEngine;
+using Meta.XR.BuildingBlocks;
+using Oculus.Interaction.HandGrab;
+
 
 public class GrabListener : MonoBehaviour
 {
-    Grabbable grabbable;
+
     Rigidbody rb;
     bool isGrabbing;
     bool isFloating = false;
@@ -18,12 +21,23 @@ public class GrabListener : MonoBehaviour
     [SerializeField] float floatAmplitude = 0.05f; // 上下の振幅(m)
     [SerializeField] float floatSpeed = 2f;       // 上下スピード
 
+    //RigidBodyをなくした時に停止するもの
+    Grabbable grabbable;
+    BuildingBlock buildingBlock;
+
+    GrabInteractable grabInteractable;
+    HandGrabInteractable handGrabInteractable;
+
     void Awake()
     {
         grabbable = GetComponent<Grabbable>();
         grabbable.WhenPointerEventRaised += OnPointerEvent;
+        buildingBlock = GetComponent<BuildingBlock>();
 
-        // Rigidbodyがある場合は設定を保存
+        Transform child = transform.GetChild(0);
+        grabInteractable = child.GetComponent<GrabInteractable>();
+        handGrabInteractable = child.GetComponent<HandGrabInteractable>();
+
         rb = GetComponent<Rigidbody>();
         if (rb != null)
         {
@@ -62,15 +76,20 @@ public class GrabListener : MonoBehaviour
             // 親がいる場合はRigidbodyコンポーネントを削除
             if (rb != null)
             {
+                grabbable.enabled = false;
+                buildingBlock.enabled = false;
+                InteractableTriggerBroadcaster inter = GetComponent<InteractableTriggerBroadcaster>();
+                if (inter != null) inter.enabled = false;
+                grabInteractable.enabled = false;
+                handGrabInteractable.enabled = false;
+
                 SaveRigidbodySettings();
                 Destroy(rb);
                 rb = null;
                 isFloating = false;
                 isGrabbing = false;
-                Debug.Log("🔒 親オブジェクト検出: Rigidbodyコンポーネント削除");
 
-                Grabbable gb = transform.GetComponent<Grabbable>();
-                gb.enabled = false;
+                Debug.Log("🔒 親オブジェクト検出: Rigidbodyコンポーネント削除");
             }
         }
         else
@@ -86,8 +105,13 @@ public class GrabListener : MonoBehaviour
                 rb.isKinematic = false;
                 Debug.Log("🔓 親オブジェクトなし: Rigidbodyコンポーネント追加");
 
-                Grabbable gb = transform.GetComponent<Grabbable>();
-                gb.enabled = true;
+
+                buildingBlock.enabled = true;
+                grabbable.enabled = true;
+                InteractableTriggerBroadcaster inter = GetComponent<InteractableTriggerBroadcaster>();
+                if (inter != null) inter.enabled = true;
+                grabInteractable.enabled = true;
+                handGrabInteractable.enabled = true;
             }
         }
     }

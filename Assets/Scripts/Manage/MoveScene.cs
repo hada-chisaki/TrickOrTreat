@@ -14,6 +14,11 @@ public class MoveScene : MonoBehaviour
         // 追加: VRコントローラ（Input System）
         if (nextSentence != null && nextSentence.action.WasPressedThisFrame())
         {
+            Debug.Log("XBotton");
+            fadeExample.LoadSceneWithFade(sceneName);
+        }
+        else if (Input.GetKeyDown(KeyCode.Space))
+        {
             fadeExample.LoadSceneWithFade(sceneName);
         }
     }

@@ -4155,7 +4155,7 @@ MonoBehaviour:
   - {fileID: 273863911}
   - {fileID: 1976659612}
   - {fileID: 1530349364}
-  spawnInterval: 5
+  spawnInterval: 10
   spawnCount: 1
   specialGhostA: {fileID: 130619351}
   specialGhostB: {fileID: 130619351}
@@ -6544,53 +6544,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!1 &1367231555
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1367231557}
-  - component: {fileID: 1367231556}
-  m_Layer: 0
-  m_Name: ScoreManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1367231556
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1367231555}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 639248cfcf413914691cb861de65d237, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  initialScore: 100
-  currentScore: 0
-  isGameOver: 0
---- !u!4 &1367231557
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1367231555}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.0320005, y: 1.9219999, z: 0.35099983}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1368125236
 GameObject:
   m_ObjectHideFlags: 0
@@ -6609,7 +6562,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1368125237
 Transform:
   m_ObjectHideFlags: 0
@@ -6618,12 +6571,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1368125236}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 32.71, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 337281497}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!114 &1368125238
 MonoBehaviour:
@@ -6676,7 +6629,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1368125236}
-  m_Enabled: 0
+  m_Enabled: 1
 --- !u!20 &1368125240
 Camera:
   m_ObjectHideFlags: 0
@@ -7379,6 +7332,27 @@ MonoBehaviour:
   timerText: {fileID: 796488030}
   Location: {fileID: 6354504831042064474}
   okashiManager: {fileID: 1305787679}
+  leaveTimeActions:
+  - time: 170
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 832675393}
+          m_TargetAssemblyTypeName: SpawnManager, Assembly-CSharp
+          m_MethodName: ChangeSpawnGhostCount
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 3
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - time: 0
+    action:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!4 &1566619034
 Transform:
   m_ObjectHideFlags: 0
@@ -9586,9 +9560,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 471940, guid: 9128fac7ecb9c4b4085275bbf85879ee, type: 3}
       insertIndex: -1
       addedObject: {fileID: 203944558}
-    - targetCorrespondingSourceObject: {fileID: 471940, guid: 9128fac7ecb9c4b4085275bbf85879ee, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1368125237}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 181360, guid: 9128fac7ecb9c4b4085275bbf85879ee, type: 3}
       insertIndex: -1
@@ -13604,7 +13575,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &4039103492393128287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16596,31 +16567,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5247793177788777924, guid: f6af189fde748794db4ee2fa9880cc71, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9687838
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5247793177788777924, guid: f6af189fde748794db4ee2fa9880cc71, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.18526383
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5247793177788777924, guid: f6af189fde748794db4ee2fa9880cc71, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.15545487
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5247793177788777924, guid: f6af189fde748794db4ee2fa9880cc71, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.054488763
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5247793177788777924, guid: f6af189fde748794db4ee2fa9880cc71, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5247793177788777924, guid: f6af189fde748794db4ee2fa9880cc71, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5247793177788777924, guid: f6af189fde748794db4ee2fa9880cc71, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8322616980038411039, guid: f6af189fde748794db4ee2fa9880cc71, type: 3}
       propertyPath: m_Name
@@ -16703,6 +16674,7 @@ SceneRoots:
   - {fileID: 203363987}
   - {fileID: 1678368899}
   - {fileID: 8787897339798276049}
+  - {fileID: 1368125237}
   - {fileID: 537525478}
   - {fileID: 2109357006}
   - {fileID: 1566619034}
@@ -16712,4 +16684,3 @@ SceneRoots:
   - {fileID: 173848895}
   - {fileID: 820001480}
   - {fileID: 1305787677}
-  - {fileID: 1367231557}
