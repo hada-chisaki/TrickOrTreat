@@ -4166,8 +4166,8 @@ MonoBehaviour:
   specialGhostB: {fileID: 130619351}
   specialSpawnIntervalA: 15
   specialSpawnIntervalB: 40
-  spawnNormal: {fileID: 8300000, guid: b5000afec3c9ae4418858a741d9bf9f3, type: 3}
-  spawnSpe: {fileID: 8300000, guid: b5000afec3c9ae4418858a741d9bf9f3, type: 3}
+  spawnNormal: {fileID: 8300000, guid: 4b00a52d541877d41a0f98c751b2c21b, type: 3}
+  spawnSpe: {fileID: 8300000, guid: 4b00a52d541877d41a0f98c751b2c21b, type: 3}
 --- !u!1001 &834573514
 PrefabInstance:
   m_ObjectHideFlags: 0
