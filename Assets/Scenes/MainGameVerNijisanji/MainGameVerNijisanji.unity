@@ -1373,7 +1373,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ce19c00e4094633489c32da83d40fdb8, type: 2}
+  - {fileID: 2100000, guid: e781ba0631471bf4d8bd0975c724d1d4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1448,7 +1448,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 36f3fb792bad4324b919fcf7ff29677a, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 19aabd79eae882840a457848982258bd, type: 2}
   m_BuildHeightMesh: 0
 --- !u!114 &222197947 stripped
 MonoBehaviour:
@@ -3164,7 +3164,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: e781ba0631471bf4d8bd0975c724d1d4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3807,7 +3807,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: e781ba0631471bf4d8bd0975c724d1d4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6361,7 +6361,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: e781ba0631471bf4d8bd0975c724d1d4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6479,7 +6479,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: e781ba0631471bf4d8bd0975c724d1d4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -8990,6 +8990,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1749942897}
   - component: {fileID: 1749942898}
+  - component: {fileID: 1749942899}
   m_Layer: 5
   m_Name: HPBarUI
   m_TagString: Untagged
@@ -9035,6 +9036,20 @@ MonoBehaviour:
   normalColor: {r: 0, g: 1, b: 0, a: 1}
   dangerColor: {r: 1, g: 0, b: 0, a: 1}
   dangerThreshold: 0.4
+--- !u!114 &1749942899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1749942896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27aa40dcfd74f994aa3ccec29adb9921, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scaleUp: 1.2
+  duration: 0.15
 --- !u!4 &1789264027 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4681072648641592757, guid: fac1b34d244291e409464389de307e81, type: 3}

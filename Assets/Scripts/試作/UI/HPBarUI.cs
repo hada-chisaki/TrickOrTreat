@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,5 +41,15 @@ public class HPBarUI : MonoBehaviour
 
         // 色分岐
         if (fillImage) fillImage.color = (r <= dangerThreshold) ? dangerColor : normalColor;
+        if (r <= dangerThreshold)
+        {
+            RhythmBounceUI ui = GetComponent<RhythmBounceUI>();
+            ui.enabled = true;
+        }
+        else
+        {
+            RhythmBounceUI ui = GetComponent<RhythmBounceUI>();
+            ui.enabled = false;
+        }
     }
 }

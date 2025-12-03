@@ -22,4 +22,9 @@ public class MoveScene : MonoBehaviour
             fadeExample.LoadSceneWithFade(sceneName);
         }
     }
+
+    public void SceneMove()
+    {
+        fadeExample.LoadSceneWithFade(sceneName);
+    }
 }
