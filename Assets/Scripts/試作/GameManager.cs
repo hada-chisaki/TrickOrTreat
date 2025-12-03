@@ -50,6 +50,11 @@ public class GameManager : MonoBehaviour
     private float remainingTime;
     private bool isGameActive = false;   // ← 最初はfalseにしておく
 
+    [Header("効果音")]
+    [SerializeField] private AudioClip startSE;
+    [SerializeField] private AudioClip start_hoissuru;
+    [SerializeField] private AudioClip end_hoissuru;
+
     void Start()
     {
         remainingTime = gameTime;
@@ -75,6 +80,7 @@ public class GameManager : MonoBehaviour
         }
         else if (!useStartCountdown)
         {
+            SoundManager.Instance.PlayOneShot(start_hoissuru);
             isGameActive = true;
         }
 
@@ -93,6 +99,7 @@ public class GameManager : MonoBehaviour
         else if (remainingTime <= 0)
         {
             StopGame();
+            SoundManager.Instance.PlayOneShot(end_hoissuru);
         }
 
         // タイマー表示（オプション）
@@ -183,6 +190,8 @@ public class GameManager : MonoBehaviour
         startCountdownText.gameObject.SetActive(false);
         spawner.SetActive(true);
         isGameActive = true;
+        SoundManager.Instance.PlayOneShot(start_hoissuru);
+        SoundManager.Instance.PlayOneShot(startSE);
     }
 
     // -------------------------

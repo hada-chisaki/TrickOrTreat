@@ -20,6 +20,10 @@ public class SpawnManager : MonoBehaviour
     public float specialSpawnIntervalA = 20f;
     public float specialSpawnIntervalB = 30f;
 
+    [Header("サウンド")]
+    [SerializeField] private AudioClip spawnNormal;
+    [SerializeField] private AudioClip spawnSpe;
+
     void Start()
     {
         // 子オブジェクトを変換して登録
@@ -82,6 +86,8 @@ public class SpawnManager : MonoBehaviour
             ghost.SetActive(true);
 
             availablePoints.RemoveAt(pointIndex);
+
+            SoundManager.Instance.PlayOneShot(spawnNormal);
         }
     }
 
@@ -104,6 +110,8 @@ public class SpawnManager : MonoBehaviour
         Transform randomPoint = spawnPoints[Random.Range(0, spawnPoints.Count)];
         GameObject ghost = Instantiate(prefab, randomPoint.position, Quaternion.identity);
         ghost.SetActive(true);
+
+        SoundManager.Instance.PlayOneShot(spawnSpe);
     }
 
     // -----------------------
