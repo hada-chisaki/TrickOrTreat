@@ -105,13 +105,12 @@ public class GrabListener : MonoBehaviour
                 rb.isKinematic = false;
                 Debug.Log("🔓 親オブジェクトなし: Rigidbodyコンポーネント追加");
 
-
-                buildingBlock.enabled = true;
                 grabbable.enabled = true;
                 InteractableTriggerBroadcaster inter = GetComponent<InteractableTriggerBroadcaster>();
                 if (inter != null) inter.enabled = true;
                 grabInteractable.enabled = true;
                 handGrabInteractable.enabled = true;
+                buildingBlock.enabled = true;
             }
         }
     }
