@@ -92,8 +92,10 @@ public class Enemy : MonoBehaviour
         if (col) col.enabled = false;
 
         //お菓子オブジェクトの親子関係を解除
-        treatObj.transform.SetParent(null);
-        Destroy(gameObject);
+        treatObj?.transform?.SetParent(null);
+
+        Transform parent = transform.parent;
+        Destroy(parent?.gameObject);
     }
 
     public void StealTreat()  //お菓子を出現させる関数
@@ -108,7 +110,8 @@ public class Enemy : MonoBehaviour
 
     public void DestroyGhost()
     {
-        Destroy(this.gameObject);
+        Transform parent = transform.parent;
+        Destroy(parent.gameObject);
     }
 
 }
