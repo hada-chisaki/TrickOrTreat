@@ -8,7 +8,6 @@ public class GameManager : MonoBehaviour
     [Header("ゲーム設定")]
     [SerializeField] private float gameTime = 120f; // ゲーム時間（秒）
 
-
     [Header("UI要素")]
     [SerializeField] private GameObject resultUI; // 結果表示UI
     [SerializeField] private Text scoreText; // スコア表示テキスト
@@ -46,20 +45,6 @@ public class GameManager : MonoBehaviour
         // タイマー更新
         remainingTime -= Time.deltaTime;
 
-        // タイマー表示（オプション）
-        if (timerText != null)
-            timerText.text = $"残り時間: {Mathf.Max(0, Mathf.CeilToInt(remainingTime))}秒";
-
-        foreach (var leaveTimeAction in leaveTimeActions)
-        {
-            if (leaveTimeAction.time == remainingTime)
-            {
-                leaveTimeAction.action?.Invoke();
-
-                Debug.Log("関数実行");
-            }
-        }
-
         if (okashiManager.isGameOver)
         {
             GameOver();
@@ -68,6 +53,20 @@ public class GameManager : MonoBehaviour
         else if (remainingTime <= 0)
         {
             StopGame();
+        }
+
+        // タイマー表示（オプション）
+        if (timerText != null)
+            timerText.text = $"残り時間: {Mathf.Max(0, Mathf.CeilToInt(remainingTime))}秒";
+
+        foreach (var leaveTimeAction in leaveTimeActions)
+        {
+            int compareTime = (int)remainingTime;
+            if (leaveTimeAction.time == compareTime)
+            {
+                leaveTimeAction.action?.Invoke();
+                return;
+            }
         }
     }
 
