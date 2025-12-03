@@ -10,6 +10,7 @@ public class FadeExample : MonoBehaviour
     [Header("UI要素のフェード例")]
     [SerializeField] private GameObject uiPanel;
     [SerializeField] private GameObject titleText;
+    [SerializeField] public bool isFadeIn = false;
 
     private void Start()
     {
@@ -17,6 +18,7 @@ public class FadeExample : MonoBehaviour
         ScreenFadeManager.In(1.5f, () =>
         {
             Debug.Log("画面フェードイン完了");
+            isFadeIn = true;
         });
     }
 
