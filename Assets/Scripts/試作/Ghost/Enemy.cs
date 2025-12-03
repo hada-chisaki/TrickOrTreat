@@ -105,4 +105,10 @@ public class Enemy : MonoBehaviour
         transform.localRotation = Quaternion.identity;
         treatObj.transform.localPosition = new Vector3(0.0f, 0.0f, -0.5f);
     }
+
+    public void DestroyGhost()
+    {
+        Destroy(this.gameObject);
+    }
+
 }
