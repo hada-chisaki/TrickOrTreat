@@ -1,34 +1,7 @@
 {
+    "version": 1,
     "name": "Input",
     "maps": [
-        {
-            "name": "New action map",
-            "id": "4ed23d19-63bc-46b0-bddb-e87a997e1534",
-            "actions": [
-                {
-                    "name": "UI",
-                    "type": "Button",
-                    "id": "bbf9807f-5042-485e-8be9-f821ac35075f",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "2fa86a1b-f5a0-4c34-9143-ad67cff61682",
-                    "path": "<QuestTouchPlusController>/secondaryButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "UI",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
         {
             "name": "Player",
             "id": "7243f3be-0053-4de6-b8b0-e19bf1c957ef",
@@ -52,6 +25,34 @@
                     "processors": "",
                     "groups": "",
                     "action": "XBotton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "SceneLoad",
+            "id": "2fb31951-911e-4a25-8e30-ca5ec05c7459",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "87bf28e0-d985-4a23-8fa7-1c782c0a1fa0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "063b2d61-944a-4dcd-a5be-d8954a25ad40",
+                    "path": "<XRController>{LeftHand}/{PrimaryButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

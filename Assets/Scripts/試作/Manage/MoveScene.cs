@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class MoveScene : MonoBehaviour
 {
-    [SerializeField] private InputActionReference nextSentence;
+    [SerializeField] private InputActionReference sceneLoad;
     [SerializeField] FadeExample fadeExample;
     [SerializeField] string sceneName;
 
@@ -12,7 +12,7 @@ public class MoveScene : MonoBehaviour
     void Update()
     {
         // 追加: VRコントローラ（Input System）
-        if (nextSentence != null && nextSentence.action.WasPressedThisFrame())
+        if (sceneLoad != null && sceneLoad.action.WasPressedThisFrame())
         {
             Debug.Log("XBotton");
             fadeExample.LoadSceneWithFade(sceneName);
