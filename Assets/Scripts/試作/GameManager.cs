@@ -56,6 +56,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioClip startSE;
     [SerializeField] private AudioClip start_hoissuru;
     [SerializeField] private AudioClip end_hoissuru;
+    [SerializeField] private AudioClip countDown;
+
 
     void Start()
     {
@@ -182,29 +184,34 @@ public class GameManager : MonoBehaviour
     // -------------------------
     private IEnumerator StartCountdownRoutine()
     {
-
         startCountdownText.gameObject.SetActive(true);
 
         for (int t = startCountdownSeconds; t > 0; t--)
         {
             startCountdownText.text = t.ToString();
+
+            SoundManager.Instance.PlayOneShot(countDown);
+
             yield return new WaitForSeconds(1f);
         }
 
         if (!string.IsNullOrEmpty(startCountdownEndText))
         {
             startCountdownText.text = startCountdownEndText;
+
+            SoundManager.Instance.PlayOneShot(start_hoissuru);
+            SoundManager.Instance.PlayOneShot(startSE);
+
             yield return new WaitForSeconds(1f);
         }
 
         startCountdownText.gameObject.SetActive(false);
+
         spawner.SetActive(true);
         HpUI.SetActive(true);
         TimeUI.SetActive(true);
 
         isGameActive = true;
-        SoundManager.Instance.PlayOneShot(start_hoissuru);
-        SoundManager.Instance.PlayOneShot(startSE);
 
         Debug.Log(isGameActive);
     }

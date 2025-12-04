@@ -11,6 +11,8 @@ public class HammerPhysicsFollower : MonoBehaviour
     {
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
+
+        rb.constraints = RigidbodyConstraints.FreezeRotationY;
     }
 
     void FixedUpdate()
