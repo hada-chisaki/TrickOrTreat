@@ -301,6 +301,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiPanel: {fileID: 0}
   titleText: {fileID: 1161262985}
+  isFadeIn: 0
 --- !u!114 &98497196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -355,7 +356,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneLoad: {fileID: 0}
   fadeExample: {fileID: 98497195}
-  sceneName: MainGame
+  sceneName: MainGameVerNijisanji
 --- !u!1 &251198259
 GameObject:
   m_ObjectHideFlags: 0

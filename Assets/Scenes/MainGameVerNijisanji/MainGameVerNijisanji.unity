@@ -4642,7 +4642,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 902861974}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 812511e438d49ae4e9e1ed42c008f861, type: 3}
   m_Name: 
@@ -8133,7 +8133,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1532149247
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8319,7 +8319,13 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+  - time: 100
+    action:
+      m_PersistentCalls:
+        m_Calls: []
   spawner: {fileID: 832675391}
+  HpUI: {fileID: 1749942896}
+  TimeUI: {fileID: 1882848430}
   useStartCountdown: 1
   startCountdownSeconds: 10
   startCountdownText: {fileID: 1222106979}
@@ -9145,7 +9151,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1749942897
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9450,7 +9456,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1882848431
 RectTransform:
   m_ObjectHideFlags: 0

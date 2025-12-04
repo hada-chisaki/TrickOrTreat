@@ -31,7 +31,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] public List<LeaveTimeAction> leaveTimeActions = new List<LeaveTimeAction>();
 
     [Header("ゲーム開始時にアクティブ化するもの")]
-    public GameObject spawner;
+    [SerializeField] public GameObject spawner;
+    [SerializeField] public GameObject HpUI;
+    [SerializeField] public GameObject TimeUI;
 
     // ▼▼ ここから カウントダウン関係 ▼▼
     [Header("開始カウントダウン")]
@@ -82,6 +84,13 @@ public class GameManager : MonoBehaviour
         {
             SoundManager.Instance.PlayOneShot(start_hoissuru);
             isGameActive = true;
+        }
+
+        if (fadeExample == null)
+        {
+            // 非アクティブなオブジェクトも含めて探したい場合は true を付ける
+            FadeExample fade = FindObjectOfType<FadeExample>(true);
+            GetComponent<FadeExample>();
         }
 
         if (!isGameActive) return;
@@ -141,6 +150,8 @@ public class GameManager : MonoBehaviour
         if (endCountdownText != null)
             endCountdownText.gameObject.SetActive(false);
 
+        spawner.SetActive(false);
+
         // 結果表示
         if (resultUI != null)
         {
@@ -171,7 +182,6 @@ public class GameManager : MonoBehaviour
     // -------------------------
     private IEnumerator StartCountdownRoutine()
     {
-        isGameActive = false;
 
         startCountdownText.gameObject.SetActive(true);
 
@@ -189,9 +199,14 @@ public class GameManager : MonoBehaviour
 
         startCountdownText.gameObject.SetActive(false);
         spawner.SetActive(true);
+        HpUI.SetActive(true);
+        TimeUI.SetActive(true);
+
         isGameActive = true;
         SoundManager.Instance.PlayOneShot(start_hoissuru);
         SoundManager.Instance.PlayOneShot(startSE);
+
+        Debug.Log(isGameActive);
     }
 
     // -------------------------
