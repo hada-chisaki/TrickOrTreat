@@ -9,13 +9,13 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Scenes/MainGameVerNijisanji/Title.unity
+    path: Assets/Scenes/Main/Title.unity
     guid: 97d9e517dafd2654a89a52c96d0e4985
   - enabled: 1
     path: Assets/Scenes/MainGame/MainGame.unity
     guid: b0096e6b81af12a4c9891da962d6e63a
   - enabled: 1
-    path: Assets/Scenes/MainGameVerNijisanji/MainGameVerNijisanji.unity
+    path: Assets/Scenes/Test/SampleNiji.unity
     guid: 55263d0cae4ffa54e90ec92809a35b87
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 19afe31565bbc1542a0fe7ad953e9361, type: 2}
