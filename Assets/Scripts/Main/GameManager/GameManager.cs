@@ -15,7 +15,7 @@ public sealed class GameManager : MonoBehaviour
     [SerializeField] string resultSceneName = "Result";
     [SerializeField] float toResultDelaySeconds = 0f;
 
-    public int Score { get; private set; } = 10;
+    public int Score { get; private set; } = 100;
     public float GameTimeSeconds { get; private set; }
     public float SinceEventSeconds { get; private set; }
 
@@ -69,19 +69,6 @@ public sealed class GameManager : MonoBehaviour
         _startRoutine = null;
     }
 
-    // ---- Score操作（最小） ----
-    public void SetScore(int value)
-    {
-        Score = value;
-        if (_isRunning && !_finished && !_terminated) CheckGameResult();
-    }
-
-    public void AddScore(int delta)
-    {
-        Score += delta;
-        if (_isRunning && !_finished && !_terminated) CheckGameResult();
-    }
-
     // ---- ループ制御 ----
     void ScheduleStart(float delay, FadeFinished fadeFinished)
     {
@@ -90,6 +77,7 @@ public sealed class GameManager : MonoBehaviour
         {
             if (_startRoutine != null) StopCoroutine(_startRoutine);
             _startRoutine = StartCoroutine(StartAfter(delay));
+
 
             isFadeIn = true;
         }
