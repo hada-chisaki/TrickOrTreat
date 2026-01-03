@@ -1,6 +1,7 @@
 using System.Collections;
-using System.Reflection;
 using UnityEngine;
+using UnityEngine.AI;
+using Unity.AI.Navigation;
 
 [ExecuteAlways]
 public sealed class StageFrameManager : MonoBehaviour
@@ -9,11 +10,11 @@ public sealed class StageFrameManager : MonoBehaviour
     [SerializeField] Transform leftPlane;   // 右端をPivot
     [SerializeField] Transform rightPlane;  // 左端をPivot
 
-    [Header("Closed Direction Offset (deg)")]
-    [SerializeField] float closedYawOffsetDeg = 90f; // 0: X方向, 90: Z方向
-
     [Header("Pivot (null = world zero)")]
-    [SerializeField] Transform pivot;
+    [SerializeField] Transform pivot; // nullなら(0,0,0)
+
+    [Header("Closed Direction Offset (deg)")]
+    [SerializeField] float closedYawOffsetDeg = 90f;
 
     [Header("Open Angle (deg) ※2枚の合計開き角")]
     [SerializeField] float targetAngleDeg = 0f;
@@ -21,59 +22,62 @@ public sealed class StageFrameManager : MonoBehaviour
     [Header("Rotate Speed (deg/sec)")]
     [SerializeField] float rotateSpeedDegPerSec = 180f;
 
+    [Header("Start Behavior")]
+    [Tooltip("Play開始時はゆっくりではなく、最初から目標角度にする")]
+    [SerializeField] bool snapToTargetOnPlayStart = true;
+
     [Header("Closed Pose Rule")]
-    [Tooltip("0°(閉じ)で2枚が重なるように、左をYで180°反転させる")]
     [SerializeField] bool flipLeft180OnClosed = true;
 
-    [Header("Stack (Z)")]
+    [Header("Optional Z-Stack (avoid z-fighting)")]
     [SerializeField] float stackDepthZ = 0.01f;
     [SerializeField] bool stackInWorldZ = true;
 
-    [Header("NavMesh Rebuild (optional)")]
-    [SerializeField] Component[] navMeshSurfaces;
-    [SerializeField] bool autoFindNavMeshSurfaces = true;
+    [Header("NavMesh Rebuild")]
+    [SerializeField] NavMeshSurface[] navMeshSurfaces; // Transform入らない
+    [SerializeField] bool rebakeOnFirstApply = true;
     [SerializeField] bool rebakeOnReachedTarget = true;
-    [SerializeField] bool rebakeOnFirstApply = true;     // ★追加：初回配置でも焼く
     [SerializeField] float reachedEpsilonDeg = 0.01f;
+
+    [Header("Debug")]
+    [SerializeField] bool debugLog = true;
 
     const float PlaneHalfSize = 5f;
 
     float _currentOpenDeg;
     float _lastTargetDeg;
-    bool _rebakePending;
 
-    // ★ここが重要：オフセットに依存しない「生の閉じ基準回転」
+    // オフセットに依存しない「生の閉じ基準回転」
     Quaternion _rawBaseRight;
     Quaternion _rawBaseLeft;
     bool _hasRawBase;
+
+    Coroutine _rebakeCo;
 
     void OnEnable()
     {
         if (!leftPlane || !rightPlane) return;
 
-        EnsureNavMeshSurfaces();
-
-        // ★基準は一度だけ作る（オフセットを差し引いて raw を作る）
         if (!_hasRawBase)
             CaptureRawClosedBaseFromCurrent();
 
-        _currentOpenDeg = 0f;
+        if (Application.isPlaying && snapToTargetOnPlayStart)
+            _currentOpenDeg = targetAngleDeg;   // ★開始時は目標角度にスナップ
+        else
+            _currentOpenDeg = 0f;
+
         _lastTargetDeg = targetAngleDeg;
-        _rebakePending = true; // ★初回も到達も焼けるように
 
         ApplyImmediate();
 
         if (Application.isPlaying && rebakeOnFirstApply)
-            StartCoroutine(RebakeNextFrame());
+            RequestRebake("FirstApply");
     }
 
     void OnValidate()
     {
         if (!leftPlane || !rightPlane) return;
 
-        EnsureNavMeshSurfaces();
-
-        // ★ここで再キャプチャしない（オフセットが積み上がる原因）
         if (!_hasRawBase)
             CaptureRawClosedBaseFromCurrent();
 
@@ -87,14 +91,17 @@ public sealed class StageFrameManager : MonoBehaviour
     {
         if (!leftPlane || !rightPlane) return;
 
+        // 目標変更
         if (!Mathf.Approximately(_lastTargetDeg, targetAngleDeg))
         {
             _lastTargetDeg = targetAngleDeg;
-            _rebakePending = true;
         }
+
+        float prev = _currentOpenDeg;
 
         if (Application.isPlaying)
         {
+            // ★開始時スナップ後は、通常はMoveTowardsで追従（速度0なら動かない＝到達しない）
             _currentOpenDeg = Mathf.MoveTowards(
                 _currentOpenDeg,
                 targetAngleDeg,
@@ -112,12 +119,31 @@ public sealed class StageFrameManager : MonoBehaviour
         Apply(leftPlane, _rawBaseLeft, -half, EdgeKind.RightEdgeAtPivot, -zHalf);
         Apply(rightPlane, _rawBaseRight, +half, EdgeKind.LeftEdgeAtPivot, +zHalf);
 
-        if (Application.isPlaying && rebakeOnReachedTarget && _rebakePending)
+        // ---- 到達判定（取りこぼさない版）----
+        if (Application.isPlaying && rebakeOnReachedTarget)
         {
-            if (Mathf.Abs(_currentOpenDeg - targetAngleDeg) <= reachedEpsilonDeg)
+            bool wasAtTarget = Mathf.Abs(prev - targetAngleDeg) <= reachedEpsilonDeg;
+            bool isAtTarget = Mathf.Abs(_currentOpenDeg - targetAngleDeg) <= reachedEpsilonDeg;
+
+            // 「未到達 → 到達」に変わった瞬間だけベイク
+            if (!wasAtTarget && isAtTarget)
             {
-                RebuildNavMeshOnce();
-                _rebakePending = false;
+                // ここは debugLog に関係なくログ出す（出ない問題の切り分け用）
+                Debug.Log($"[StageFrameManager] ReachedTarget (prev={prev}, cur={_currentOpenDeg}, target={targetAngleDeg})", this);
+                RequestRebake("ReachedTarget");
+            }
+
+            // 追加の切り分け（ログが出ない時）
+            if (debugLog)
+            {
+                // 回転がそもそも進んでいるかチェック
+                if (Mathf.Approximately(prev, _currentOpenDeg) && !Mathf.Approximately(_currentOpenDeg, targetAngleDeg))
+                {
+                    Debug.LogWarning(
+                        $"[StageFrameManager] Not moving toward target. speed={rotateSpeedDegPerSec}, prev={prev}, cur={_currentOpenDeg}, target={targetAngleDeg}",
+                        this
+                    );
+                }
             }
         }
     }
@@ -125,29 +151,22 @@ public sealed class StageFrameManager : MonoBehaviour
     public void SetOpenAngle(float openAngleDeg)
     {
         targetAngleDeg = openAngleDeg;
-        _rebakePending = true;
     }
 
-    // ★手動で基準を取り直したい時用（オフセットを変えた後など）
     [ContextMenu("Recapture Raw Closed Base From Current")]
     public void CaptureRawClosedBaseFromCurrent()
     {
         if (!rightPlane) return;
 
-        // いまの右Plane回転は「(closedYawOffsetDegが乗った見た目)」なので、それを差し引いて raw を作る
         _rawBaseRight = Quaternion.AngleAxis(-closedYawOffsetDeg, Vector3.up) * rightPlane.rotation;
 
         _rawBaseLeft = flipLeft180OnClosed
             ? (Quaternion.AngleAxis(180f, Vector3.up) * _rawBaseRight)
-            : (leftPlane ? Quaternion.AngleAxis(-closedYawOffsetDeg, Vector3.up) * leftPlane.rotation : _rawBaseRight);
+            : (leftPlane
+                ? Quaternion.AngleAxis(-closedYawOffsetDeg, Vector3.up) * leftPlane.rotation
+                : _rawBaseRight);
 
         _hasRawBase = true;
-    }
-
-    IEnumerator RebakeNextFrame()
-    {
-        yield return null; // Transform反映後に焼く
-        RebuildNavMeshOnce();
     }
 
     void ApplyImmediate()
@@ -165,84 +184,53 @@ public sealed class StageFrameManager : MonoBehaviour
     {
         Vector3 p = pivot ? pivot.position : Vector3.zero;
 
-        // ★rawBase に対して「オフセット + 開き角」を毎回計算で乗せる（積み上がらない）
         Quaternion rot = Quaternion.AngleAxis(closedYawOffsetDeg + yawDeg, Vector3.up) * rawBaseRot;
         plane.rotation = rot;
 
         float halfWidth = PlaneHalfSize * plane.lossyScale.x;
         Vector3 rightDir = rot * Vector3.right;
 
-        Vector3 center = edge == EdgeKind.RightEdgeAtPivot
+        Vector3 center = (edge == EdgeKind.RightEdgeAtPivot)
             ? (p - rightDir * halfWidth)
             : (p + rightDir * halfWidth);
 
-        Vector3 zDir = stackInWorldZ ? Vector3.forward : (rot * Vector3.forward);
-        center += zDir * stackOffsetZ;
+        if (stackDepthZ != 0f)
+        {
+            Vector3 zDir = stackInWorldZ ? Vector3.forward : (rot * Vector3.forward);
+            center += zDir * stackOffsetZ;
+        }
 
         plane.position = center;
     }
 
-    void EnsureNavMeshSurfaces()
-    {
-        if (!autoFindNavMeshSurfaces) return;
-        if (navMeshSurfaces != null && navMeshSurfaces.Length > 0) return;
-
-        // まず子階層
-        var monosChild = GetComponentsInChildren<MonoBehaviour>(true);
-        navMeshSurfaces = FindNavMeshSurfacesFrom(monosChild);
-
-        // 子に無ければシーン全体（重要）
-        if (navMeshSurfaces == null || navMeshSurfaces.Length == 0)
-        {
-#if UNITY_2023_1_OR_NEWER
-            var monosAll = Object.FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-#else
-            var monosAll = Object.FindObjectsOfType<MonoBehaviour>(true);
-#endif
-            navMeshSurfaces = FindNavMeshSurfacesFrom(monosAll);
-        }
-    }
-
-    static Component[] FindNavMeshSurfacesFrom(MonoBehaviour[] monos)
-    {
-        int count = 0;
-        for (int i = 0; i < monos.Length; i++)
-            if (monos[i] && monos[i].GetType().Name == "NavMeshSurface")
-                count++;
-
-        if (count == 0) return System.Array.Empty<Component>();
-
-        var arr = new Component[count];
-        int idx = 0;
-        for (int i = 0; i < monos.Length; i++)
-            if (monos[i] && monos[i].GetType().Name == "NavMeshSurface")
-                arr[idx++] = monos[i];
-
-        return arr;
-    }
-
-    void RebuildNavMeshOnce()
+    void RequestRebake(string reason)
     {
         if (navMeshSurfaces == null || navMeshSurfaces.Length == 0)
         {
-            Debug.LogWarning("[StageFrameManager] NavMeshSurface not found. Assign it or enable autoFind.", this);
+            Debug.LogWarning($"[StageFrameManager] NavMeshSurface is empty. reason={reason}", this);
             return;
         }
 
-        for (int i = 0; i < navMeshSurfaces.Length; i++)
+        if (_rebakeCo != null) StopCoroutine(_rebakeCo);
+        _rebakeCo = StartCoroutine(RebakeEndOfFrame(reason));
+    }
+
+    IEnumerator RebakeEndOfFrame(string reason)
+    {
+        yield return new WaitForEndOfFrame();
+
+        int ok = 0;
+        foreach (var s in navMeshSurfaces)
         {
-            var c = navMeshSurfaces[i];
-            if (!c) continue;
-
-            var m = c.GetType().GetMethod(
-                "BuildNavMesh",
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
-            );
-
-            if (m != null && m.GetParameters().Length == 0)
-                m.Invoke(c, null);
-            else
-                Debug.LogWarning($"[StageFrameManager] BuildNavMesh() not found on {c.GetType().FullName}", c);
+            if (!s) continue;
+            s.RemoveData();
+            s.BuildNavMesh();
+            ok++;
         }
+
+        var tri = NavMesh.CalculateTriangulation();
+        Debug.Log($"[StageFrameManager] Rebake done. reason={reason}, surfacesBuilt={ok}, verts={tri.vertices.Length}, tris={tri.indices.Length / 3}", this);
+
+        _rebakeCo = null;
     }
 }

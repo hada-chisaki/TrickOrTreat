@@ -213,7 +213,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 427919c860c84bf4baa722307373ecf4, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 6528f929ae4aaf0498772b6d23c01e6c, type: 2}
   m_BuildHeightMesh: 0
 --- !u!1 &256120736
 GameObject:
@@ -266,12 +266,12 @@ MonoBehaviour:
   closedYawOffsetDeg: 127
   pivot: {fileID: 0}
   targetAngleDeg: 70
-  rotateSpeedDegPerSec: 180
+  rotateSpeedDegPerSec: 5
   flipLeft180OnClosed: 1
   stackDepthZ: 0.01
   stackInWorldZ: 1
   navMeshSurfaces:
-  - {fileID: 255406639}
+  - {fileID: 255406640}
   autoFindNavMeshSurfaces: 1
   rebakeOnReachedTarget: 1
   rebakeOnFirstApply: 1
