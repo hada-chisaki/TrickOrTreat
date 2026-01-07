@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Unity.AI.Navigation;
@@ -17,21 +18,22 @@ public sealed class StageFrameManager : MonoBehaviour
     [Tooltip("閉じ(0°)の向きオフセット。0: X方向 / 90: Z方向")]
     [SerializeField] float closedYawOffsetDeg = 90f;
 
-    [Header("Open Angle (deg) ※2枚の合計開き角")]
-    [SerializeField] float targetAngleDeg = 0f;
+    [Header("Open Angle (deg) ※左右別")]
+    [SerializeField] float targetLeftDeg = 0f;   // 左の開き角（正の値を推奨）
+    [SerializeField] float targetRightDeg = 0f;  // 右の開き角（正の値を推奨）
 
     [Header("Rotate Speed (deg/sec)")]
     [SerializeField] float rotateSpeedDegPerSec = 180f;
 
     [Header("Editor Preview")]
-    [Tooltip("Editor中は targetAngleDeg の状態を表示する")]
+    [Tooltip("Editor中は targetLeft/RightDeg の状態を表示する")]
     [SerializeField] bool previewInEditMode = true;
 
     [Header("Play Start")]
     [Tooltip("Play開始時に閉じ(0°)から開く")]
     [SerializeField] bool openFromClosedOnPlayStart = true;
 
-    [Tooltip("Editorプレビューで開いた姿勢のまま再生した場合、Start時のrawBase逆算に targetAngleDeg を使う（全体角度ズレ防止）")]
+    [Tooltip("Editorプレビューで開いた姿勢のまま再生した場合、Start時のrawBase逆算に targetLeft/RightDeg を使う（全体角度ズレ防止）")]
     [SerializeField] bool assumeScenePoseIsTargetOnPlayStart = true;
 
     [Header("Closed Pose Rule")]
@@ -54,7 +56,8 @@ public sealed class StageFrameManager : MonoBehaviour
     // Unity Primitive Plane は 10x10（中心から端まで 5）
     const float PlaneHalfSize = 5f;
 
-    float _currentOpenDeg;
+    float _curLeftDeg;
+    float _curRightDeg;
 
     // raw（オフセット/開き角を含まない基準回転）
     Quaternion _rawBaseRight;
@@ -67,22 +70,25 @@ public sealed class StageFrameManager : MonoBehaviour
     {
         if (!leftPlane || !rightPlane) return;
 
-        // --- ここが原因修正の本体 ---
-        // Play開始時点のシーン姿勢が「targetAngleで開いてるプレビュー姿勢」なら、
-        // その前提で rawBase を逆算してから、閉じ→開きにする。
         if (Application.isPlaying)
         {
-            float captureOpen =
-                (assumeScenePoseIsTargetOnPlayStart && previewInEditMode)
-                ? targetAngleDeg
-                : 0f;
+            float captureLeft =
+                (assumeScenePoseIsTargetOnPlayStart && previewInEditMode) ? targetLeftDeg : 0f;
+            float captureRight =
+                (assumeScenePoseIsTargetOnPlayStart && previewInEditMode) ? targetRightDeg : 0f;
 
-            CaptureRawBaseFromCurrentPose(captureOpen);
+            CaptureRawBaseFromCurrentPose(captureLeft, captureRight);
 
             if (openFromClosedOnPlayStart)
-                _currentOpenDeg = 0f;           // ★閉じから開始
+            {
+                _curLeftDeg = 0f;
+                _curRightDeg = 0f;
+            }
             else
-                _currentOpenDeg = targetAngleDeg; // ★最初から開き
+            {
+                _curLeftDeg = targetLeftDeg;
+                _curRightDeg = targetRightDeg;
+            }
 
             ApplyImmediate();
 
@@ -91,13 +97,14 @@ public sealed class StageFrameManager : MonoBehaviour
         }
         else
         {
-            // Editor：初回だけraw作って、プレビュー反映
             if (!_hasRawBase)
-                CaptureRawBaseFromCurrentPose(previewInEditMode ? targetAngleDeg : 0f);
+                CaptureRawBaseFromCurrentPose(previewInEditMode ? targetLeftDeg : 0f,
+                                              previewInEditMode ? targetRightDeg : 0f);
 
             if (previewInEditMode)
             {
-                _currentOpenDeg = targetAngleDeg;
+                _curLeftDeg = targetLeftDeg;
+                _curRightDeg = targetRightDeg;
                 ApplyImmediate();
             }
         }
@@ -107,13 +114,13 @@ public sealed class StageFrameManager : MonoBehaviour
     {
         if (!leftPlane || !rightPlane) return;
 
-        // Editor中：数値変更で即プレビュー（rawBaseは勝手に作り直さない＝offset相殺しない）
         if (!Application.isPlaying && previewInEditMode)
         {
             if (!_hasRawBase)
-                CaptureRawBaseFromCurrentPose(targetAngleDeg);
+                CaptureRawBaseFromCurrentPose(targetLeftDeg, targetRightDeg);
 
-            _currentOpenDeg = targetAngleDeg;
+            _curLeftDeg = targetLeftDeg;
+            _curRightDeg = targetRightDeg;
             ApplyImmediate();
         }
     }
@@ -123,74 +130,97 @@ public sealed class StageFrameManager : MonoBehaviour
         if (!leftPlane || !rightPlane) return;
         if (!Application.isPlaying) return;
 
-        float prev = _currentOpenDeg;
+        float prevL = _curLeftDeg;
+        float prevR = _curRightDeg;
 
-        // 実行中は目標へ開く（要望：Start時も開く → openFromClosedOnPlayStart=true で閉じから開く）
-        _currentOpenDeg = Mathf.MoveTowards(
-            _currentOpenDeg,
-            targetAngleDeg,
-            rotateSpeedDegPerSec * Time.deltaTime
-        );
+        _curLeftDeg = Mathf.MoveTowards(_curLeftDeg, targetLeftDeg, rotateSpeedDegPerSec * Time.deltaTime);
+        _curRightDeg = Mathf.MoveTowards(_curRightDeg, targetRightDeg, rotateSpeedDegPerSec * Time.deltaTime);
 
         ApplyImmediate();
 
-        // 到達した瞬間だけベイク
         if (rebakeOnReachedTarget)
         {
-            bool wasAtTarget = Mathf.Abs(prev - targetAngleDeg) <= reachedEpsilonDeg;
-            bool isAtTarget = Mathf.Abs(_currentOpenDeg - targetAngleDeg) <= reachedEpsilonDeg;
+            bool wasAtTarget =
+                Mathf.Abs(prevL - targetLeftDeg) <= reachedEpsilonDeg &&
+                Mathf.Abs(prevR - targetRightDeg) <= reachedEpsilonDeg;
+
+            bool isAtTarget =
+                Mathf.Abs(_curLeftDeg - targetLeftDeg) <= reachedEpsilonDeg &&
+                Mathf.Abs(_curRightDeg - targetRightDeg) <= reachedEpsilonDeg;
 
             if (!wasAtTarget && isAtTarget)
             {
                 if (debugLog)
-                    Debug.Log($"[StageFrameManager] ReachedTarget (prev={prev}, cur={_currentOpenDeg}, target={targetAngleDeg})", this);
+                    Debug.Log($"[StageFrameManager] ReachedTarget (L:{prevL}->{_curLeftDeg}/{targetLeftDeg}, R:{prevR}->{_curRightDeg}/{targetRightDeg})", this);
 
                 RequestRebake("ReachedTarget");
             }
         }
     }
 
-    public void SetOpenAngle(float openAngleDeg)
+    // 互換：合計角度を渡したい場合は左右に半分ずつ割る
+    public void SetOpenAngle(float totalOpenDeg)
     {
-        targetAngleDeg = openAngleDeg;
+        float half = totalOpenDeg * 0.5f;
+        targetLeftDeg = half;
+        targetRightDeg = half;
+    }
+
+    // 新：左右別指定
+    public void SetOpenAngles(float leftDeg, float rightDeg)
+    {
+        targetLeftDeg = leftDeg;
+        targetRightDeg = rightDeg;
     }
 
     /// <summary>
-    /// 「今の見た目が openAngleDeg の状態」とみなして、offset + (±open/2) を差し引いて raw を作る
+    /// 「今の見た目が left/rightDeg の状態」とみなして、offset + yaw を差し引いて raw を作る
     /// </summary>
-    void CaptureRawBaseFromCurrentPose(float openAngleDeg)
+    void CaptureRawBaseFromCurrentPose(float leftDeg, float rightDeg)
     {
-        float half = openAngleDeg * 0.5f;
+        // rightPlane は「offset + (+rightDeg)」が乗った姿勢だとみなして raw を逆算
+        _rawBaseRight = Quaternion.AngleAxis(-(closedYawOffsetDeg + rightDeg), Vector3.up) * rightPlane.rotation;
 
-        // rightPlane は「offset + (+half)」が乗った姿勢だとみなして raw を逆算
-        _rawBaseRight = Quaternion.AngleAxis(-(closedYawOffsetDeg + half), Vector3.up) * rightPlane.rotation;
-
-        // left は right を閉じで向かい合わせにする
-        _rawBaseLeft = flipLeft180OnClosed
-            ? (Quaternion.AngleAxis(180f, Vector3.up) * _rawBaseRight)
-            : (Quaternion.AngleAxis(-(closedYawOffsetDeg - half), Vector3.up) * leftPlane.rotation);
+        // leftPlane の raw は、ルールに従って決定
+        if (flipLeft180OnClosed)
+        {
+            // 閉じ(0°)で向かい合う、というルールを優先（旧仕様踏襲）
+            _rawBaseLeft = Quaternion.AngleAxis(180f, Vector3.up) * _rawBaseRight;
+        }
+        else
+        {
+            // 左も現在姿勢から逆算（left は Apply で -leftDeg を渡す前提）
+            _rawBaseLeft = Quaternion.AngleAxis(-(closedYawOffsetDeg - leftDeg), Vector3.up) * leftPlane.rotation;
+        }
 
         _hasRawBase = true;
     }
 
-    [ContextMenu("Recapture Raw Base From Current (Use current open)")]
+    [ContextMenu("Recapture Raw Base From Current (Use current L/R)")]
     public void RecaptureRawBaseFromCurrent()
     {
-        float open = Application.isPlaying ? _currentOpenDeg : (previewInEditMode ? targetAngleDeg : 0f);
-        CaptureRawBaseFromCurrentPose(open);
+        float l = Application.isPlaying ? _curLeftDeg : (previewInEditMode ? targetLeftDeg : 0f);
+        float r = Application.isPlaying ? _curRightDeg : (previewInEditMode ? targetRightDeg : 0f);
+        CaptureRawBaseFromCurrentPose(l, r);
         ApplyImmediate();
     }
 
     void ApplyImmediate()
     {
         if (!_hasRawBase)
-            CaptureRawBaseFromCurrentPose(Application.isPlaying ? _currentOpenDeg : (previewInEditMode ? targetAngleDeg : 0f));
+        {
+            float l = Application.isPlaying ? _curLeftDeg : (previewInEditMode ? targetLeftDeg : 0f);
+            float r = Application.isPlaying ? _curRightDeg : (previewInEditMode ? targetRightDeg : 0f);
+            CaptureRawBaseFromCurrentPose(l, r);
+        }
 
-        float half = _currentOpenDeg * 0.5f;
         float zHalf = stackDepthZ * 0.5f;
 
-        Apply(leftPlane, _rawBaseLeft, -half, EdgeKind.RightEdgeAtPivot, -zHalf);
-        Apply(rightPlane, _rawBaseRight, +half, EdgeKind.LeftEdgeAtPivot, +zHalf);
+        // 左はマイナス方向に開く（旧: -half）
+        Apply(leftPlane, _rawBaseLeft, -_curLeftDeg, EdgeKind.RightEdgeAtPivot, -zHalf);
+
+        // 右はプラス方向に開く（旧: +half）
+        Apply(rightPlane, _rawBaseRight, +_curRightDeg, EdgeKind.LeftEdgeAtPivot, +zHalf);
     }
 
     enum EdgeKind { RightEdgeAtPivot, LeftEdgeAtPivot }
@@ -199,7 +229,6 @@ public sealed class StageFrameManager : MonoBehaviour
     {
         Vector3 p = pivot ? pivot.position : Vector3.zero;
 
-        // ★ここでoffsetが効く（rawBaseを毎回作り直さないので相殺されない）
         Quaternion rot = Quaternion.AngleAxis(closedYawOffsetDeg + yawDeg, Vector3.up) * rawBaseRot;
         plane.rotation = rot;
 
